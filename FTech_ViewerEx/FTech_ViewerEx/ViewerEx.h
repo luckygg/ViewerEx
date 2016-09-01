@@ -5,6 +5,7 @@
 //----------------------------------------------------------
 // Programmed by William Kim
 //----------------------------------------------------------
+// Last Update : 2016-09-02
 
 // CViewerEx
 
@@ -71,13 +72,13 @@ public :
 	bool InitControl(CWnd* pWnd, bool bMenu=true);
 	void OnInitWithCamera(int nWidth, int nHeight, int nBpp);	//이미지 포인터를 사용하여 불러올 경우, 먼저 호출되어야 함.
 	bool OnLoadImageFromPtr(BYTE* pBuffer);						//이미지 포인터로 불러올 경우.
-	
+
 	//---------- Figure Functions ----------//
 	void SetEnableModifyFigure  (int iIndex, bool isEnable); // 선택한 인덱스의 도형을 수정할 것인지 설정.
 	void SetCurrentFigureIndex	(int iIndex) { if (iIndex<0 || iIndex>=MAX_DRAW) return; m_nCurrFigure = iIndex; } // 현재 도형의 인덱스 설정.
 	void SetModeDrawingFigure	(bool bEnable) { m_bDrawingFigure  = bEnable; } // 도형을 그리는 동작 중인지 설정.
 	void SetEnableDrawAllFigures(bool bEnable) { m_bDrawAllFigures = bEnable; Invalidate();} // 모든 도형을 그릴 것인지 설정.
-	
+
 	//---------- Figure Option Fuctions ----------//
 	void SetColorFigure			 (int iIndex, COLORREF clrColor) { if (iIndex<0 || iIndex>=MAX_DRAW) return; m_stFigure[iIndex].clrColor = clrColor	; Invalidate(); } // 선택한 도형의 색상 선택.
 	void SetWidthFigure			 (int iIndex, int nWidth	   ) { if (iIndex<0 || iIndex>=MAX_DRAW) return; m_stFigure[iIndex].nWidth   = nWidth	; Invalidate(); } // 선택한 도형의 두께 선택.
@@ -87,7 +88,7 @@ public :
 	void SetEnableFigureRectangle(int iIndex); // 선택한 인덱스의 도형을 '사각형'으로 선택.
 	void SetSizeRectangle(int iIndex, CPoint pt1, CPoint pt2);
 	void SetSizeRectangle(int iIndex, int nOrgX, int nOrgY, int nWidth, int nHeight);
-	
+
 	bool IsDrawFigure			(int iIndex) { if (iIndex<0 || iIndex>=MAX_DRAW) return false; return m_stFigure[iIndex].isDraw;	 } // 선택한 도형의 Draw 여부 확인.
 	bool IsEnableFigureLine		(int iIndex) { if (iIndex<0 || iIndex>=MAX_DRAW) return false; return m_stFigure[iIndex].isLine;	 } // 선택한 도형이 '선형'인지 확인.
 	bool IsEnableFigureCircle	(int iIndex) { if (iIndex<0 || iIndex>=MAX_DRAW) return false; return m_stFigure[iIndex].isCircle;	 } // 선택한 도형이 '원형'인지 확인.
@@ -97,21 +98,23 @@ public :
 	float GetLineLength			(int iIndex) { if (iIndex<0 || iIndex>=MAX_DRAW) return 0; if (m_stFigure[iIndex].isLine) return m_stFigure[iIndex].fLength; else return 0; } // 선택한 도형의 직선 거리 반환.
 	CPoint GetPointBegin		(int iIndex) { if (iIndex<0 || iIndex>=MAX_DRAW) return 0;	   return m_stFigure[iIndex].ptBegin;	 } // 선택한 도형의 시작 좌표 확인.
 	CPoint GetPointEnd			(int iIndex) { if (iIndex<0 || iIndex>=MAX_DRAW) return 0;	   return m_stFigure[iIndex].ptEnd;		 } // 선택한 도형의 종료 좌표 확인.
-	
+
 	//---------- Draw Functions ----------//
 	void SetEnableDrawCrossLine	(bool  bEnable) { m_bDrawCrossLine = bEnable; Invalidate(); }	// Cross Line을 그릴 것인지 설정.
-	
+
 	//---------- Mouse Point Information ----------//
 	CPoint GetMousePoint() { return m_ptMousePoint; }	// 이미지상의 현재 좌표 반환.
 
 	void SetEnableMenuLoad(bool bEnable);
 	void SetEnableMenuSave(bool bEnable);
-	
+
 	int GetWidth()  { return m_nWidth;  }
 	int GetHeight() { return m_nHeight; }
 	int GetBPP()	{ return m_nBpp;	}
 	int GetValueY() { return m_nY;		}
+	int GetValueY(int nPosX, int nPosY);
 	COLORREF GetValueRGB() { return m_clrRGB;  }
+	COLORREF GetValueRGB(int nPosX, int nPosY);
 	CString GetImagePath() { return m_strPath; }
 private :
 	void RegisterWindowClass(void);
@@ -128,7 +131,7 @@ private :
 	CPoint	m_ptMousePoint;			//현재 마우스의 이미지상 좌표.
 	CScrollBarEx m_wndSBH;			//가로 스크롤바.
 	CScrollBarEx m_wndSBV;			//세로 스크롤바.
-	
+
 	//----- Image Information -----//
 	float	m_fMagnification;		//이미지 배율.
 	int		m_nWidth;				//이미지 가로 크기.
@@ -146,7 +149,7 @@ private :
 	CMenu	*m_pMenu;				//마우스 우 클릭 메뉴.
 	CMenu	*m_pSubZoom;			//마우스 우 클릭 배율 세부 메뉴.
 	CMenu	*m_pSubMode;			//마우스 우 클릭 모드 세부 메뉴.
-	
+
 	//----- Overlay Drawing -----//
 	bool	m_bModifyFigure;		//이미지 수정 모드인지.
 	bool	m_bDrawFitImage;		//전체 보기 모드 인지.
@@ -167,8 +170,8 @@ private :
 	bool	m_isMoving;				//		□──────────□──────────□
 	CRect	m_rcPreFigure;			//		SW			S			SE
 
-	int GetPixelY(int nPosX, int nPosY);
-	COLORREF GetPixelRGB(int nPosX, int nPosY);
+	/*int GetPixelY(int nPosX, int nPosY);*/
+	/*COLORREF GetPixelRGB(int nPosX, int nPosY);*/
 	void CheckMenuItem(int nID, bool bMode);		//Mouse Right 버튼 메뉴.
 	void CreateMousePopupMenu();					//Popup menu 생성.
 	bool OnLoad(CString path);						//이미지 불러오기.

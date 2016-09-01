@@ -566,9 +566,9 @@ void CViewerEx::OnMouseMove(UINT nFlags, CPoint point)
 	m_ptMousePoint = point + m_ptResult;
 
 	if (m_nBpp == 8)
-		m_nY = GetPixelY(m_ptMousePoint.x, m_ptMousePoint.y);
+		m_nY = GetValueY(m_ptMousePoint.x, m_ptMousePoint.y);
 	else if (m_nBpp == 24)
-		m_clrRGB = GetPixelRGB(m_ptMousePoint.x, m_ptMousePoint.y);
+		m_clrRGB = GetValueRGB(m_ptMousePoint.x, m_ptMousePoint.y);
 
 	CWnd::OnMouseMove(nFlags, point);
 }
@@ -1515,8 +1515,10 @@ void CViewerEx::SetSizeRectangle(int iIndex, int nOrgX, int nOrgY, int nWidth, i
 	m_stFigure[iIndex].ptEnd   = CPoint(nOrgX+nWidth-1,nOrgY+nHeight-1);
 }
 
-int CViewerEx::GetPixelY(int nPosX, int nPosY)
+int CViewerEx::GetValueY(int nPosX, int nPosY)
 {
+	if (m_ImgSrc.IsNull()) return 0;
+
 	if (nPosX < 0 || nPosX >= m_nWidth)  return 0;
 	if (nPosY < 0 || nPosY >= m_nHeight) return 0;
 
@@ -1527,8 +1529,9 @@ int CViewerEx::GetPixelY(int nPosX, int nPosY)
 	return value;
 }
 
-COLORREF CViewerEx::GetPixelRGB(int nPosX, int nPosY)
+COLORREF CViewerEx::GetValueRGB(int nPosX, int nPosY)
 {
+	if (m_ImgSrc.IsNull() == true) return RGB(0,0,0);
 	if (nPosX < 0 || nPosX >= m_nWidth)  return 0;
 	if (nPosY < 0 || nPosY >= m_nHeight) return 0;
 
